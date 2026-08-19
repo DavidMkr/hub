@@ -1,0 +1,62 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro"
+import { resume } from "../content/resume"
+import { site } from "../content/site"
+---
+
+<BaseLayout title="Resume" description={`Resume for ${site.name}`}>
+  <article class="mx-auto max-w-3xl px-4 py-16" data-resume-page>
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <h1 class="text-4xl font-semibold tracking-tight">Resume</h1>
+        <p class="mt-2 text-muted">{site.name} · {site.role}</p>
+      </div>
+      <button type="button" class="pressable btn-solid" data-print-resume data-pressable>Download PDF</button>
+    </div>
+
+    <p class="mt-8">{resume.summary}</p>
+
+    <section class="mt-10">
+      <h2 class="text-sm font-semibold tracking-wide text-muted uppercase">Experience</h2>
+      <ol class="mt-4 space-y-8">
+        {
+          resume.experience.map((role) => (
+            <li>
+              <h3 class="text-xl font-semibold">{role.company}</h3>
+              <p class="text-sm text-muted">
+                {role.title} · {role.dates}
+              </p>
+              <p class="mt-2">{role.summary}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-sm font-semibold tracking-wide text-muted uppercase">Education</h2>
+      <ul class="mt-4 space-y-4">
+        {
+          resume.education.map((item) => (
+            <li>
+              <h3 class="text-xl font-semibold">{item.credential}</h3>
+              <p class="text-sm text-muted">
+                {item.school} · {item.dates}
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-sm font-semibold tracking-wide text-muted uppercase">Skills</h2>
+      <p class="mt-3">{resume.skills.join(" · ")}</p>
+    </section>
+  </article>
+  <script>
+    for (const button of document.querySelectorAll("[data-print-resume]")) {
+      button.addEventListener("click", () => window.print())
+    }
+  </script>
+</BaseLayout>

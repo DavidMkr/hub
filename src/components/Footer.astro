@@ -1,0 +1,20 @@
+---
+import { site } from "../content/site"
+---
+
+<footer class="border-t border-line">
+  <div class="mx-auto flex max-w-5xl flex-col gap-3 px-4 py-8 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
+    <p>
+      © {site.brand} · {site.name} · {site.location}
+    </p>
+    <nav aria-label="Contact" class="flex flex-wrap gap-4">
+      <a class="pressable underline-offset-4 hover:text-ink hover:underline" href={`mailto:${site.email}`} data-pressable
+        >Email</a
+      >
+      <a class="pressable underline-offset-4 hover:text-ink hover:underline" href={site.github} data-pressable>GitHub</a>
+      <a class="pressable underline-offset-4 hover:text-ink hover:underline" href={site.linkedin} data-pressable
+        >LinkedIn</a
+      >
+    </nav>
+  </div>
+</footer>

@@ -1,0 +1,56 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro"
+import { resume } from "../content/resume"
+import { site } from "../content/site"
+---
+
+<BaseLayout title="About" description={`About ${site.name}`}>
+  <article class="mx-auto max-w-3xl px-4 py-16">
+    <h1 class="text-4xl font-semibold tracking-tight">About</h1>
+    <p class="mt-4 text-lg text-muted">{resume.summary}</p>
+
+    <h2 class="mt-12 text-sm font-semibold tracking-wide text-muted uppercase">Experience</h2>
+    <ol class="mt-4 space-y-8">
+      {
+        resume.experience.map((role) => (
+          <li>
+            <h3 class="text-xl font-semibold">{role.company}</h3>
+            <p class="text-sm text-muted">
+              {role.title} · {role.dates}
+            </p>
+            <p class="mt-2">{role.summary}</p>
+            <ul class="mt-3 flex flex-wrap gap-2">
+              {role.tags.map((tag) => (
+                <li class="rounded-full bg-wash px-3 py-1 text-xs">{tag}</li>
+              ))}
+            </ul>
+          </li>
+        ))
+      }
+    </ol>
+
+    <h2 class="mt-12 text-sm font-semibold tracking-wide text-muted uppercase">Education</h2>
+    <ul class="mt-4 space-y-4">
+      {
+        resume.education.map((item) => (
+          <li>
+            <h3 class="text-xl font-semibold">{item.credential}</h3>
+            <p class="text-sm text-muted">
+              {item.school} · {item.dates}
+            </p>
+            {item.note ? <p class="mt-1 text-muted">{item.note}</p> : null}
+          </li>
+        ))
+      }
+    </ul>
+
+    <h2 class="mt-12 text-sm font-semibold tracking-wide text-muted uppercase">Skills</h2>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {
+        resume.skills.map((skill) => (
+          <li class="rounded-full border border-line px-3 py-1 text-sm">{skill}</li>
+        ))
+      }
+    </ul>
+  </article>
+</BaseLayout>
