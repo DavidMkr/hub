@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro"
+import { projects } from "../content/projects"
+import { site } from "../content/site"
+---
+
+<BaseLayout title="Work" description={`Projects by ${site.name}`}>
+  <section class="mx-auto max-w-3xl px-4 py-16" data-work-page>
+    <h1 class="text-4xl font-semibold tracking-tight">Work</h1>
+    {
+      projects.length === 0 ? (
+        <p class="mt-6 max-w-xl text-lg text-muted" data-work-empty>
+          Projects land here. The catalog is ready — first case study is content, not a rebuild.
+        </p>
+      ) : (
+        <ul class="mt-8 grid gap-4">
+          {projects.map((project) => (
+            <li class="rounded-2xl border border-line p-5">
+              <a class="pressable text-xl font-semibold" href={project.href} data-pressable>
+                {project.title}
+              </a>
+              <p class="mt-2 text-muted">{project.summary}</p>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </section>
+</BaseLayout>

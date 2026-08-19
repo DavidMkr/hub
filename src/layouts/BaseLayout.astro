@@ -1,0 +1,73 @@
+---
+import { ClientRouter } from "astro:transitions"
+import ChatDock from "../components/ChatDock"
+import Footer from "../components/Footer.astro"
+import Header from "../components/Header.astro"
+import { site } from "../content/site"
+import { THEME_STORAGE_KEY } from "../lib/theme"
+import { canonicalUrl } from "../lib/paths"
+import { personJsonLd } from "../lib/schema"
+import "../styles/global.css"
+
+interface Props {
+  title: string
+  description: string
+}
+
+const { title, description } = Astro.props
+const pageTitle =
+  title === site.brand || title === site.name
+    ? `${site.brand} — ${site.name}`
+    : `${title} · ${site.brand}`
+const canonical = canonicalUrl(Astro.site?.toString() ?? "http://localhost:4321", Astro.url.pathname)
+const jsonLd = personJsonLd(canonical)
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{pageTitle}</title>
+    <ClientRouter />
+    <script is:inline define:vars={{ THEME_STORAGE_KEY }}>
+      (function () {
+        var stored = localStorage.getItem(THEME_STORAGE_KEY)
+        var dark = stored !== "light"
+        document.documentElement.classList.toggle("dark", dark)
+        document.documentElement.classList.toggle("light", !dark)
+        document.documentElement.dataset.theme = dark ? "dark" : "light"
+        document.documentElement.style.colorScheme = dark ? "dark" : "light"
+      })()
+    </script>
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body class="flex min-h-svh flex-col font-sans antialiased">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-wash focus:px-3 focus:py-2"
+    >
+      Skip to content
+    </a>
+    <Header />
+    <main id="main" class="flex-1" transition:animate="fade">
+      <slot />
+    </main>
+    <Footer />
+    <div class="fixed right-4 bottom-4 z-50" transition:persist="chat-dock">
+      <ChatDock client:load />
+    </div>
+    <script>
+      import { initThemeControls } from "../scripts/theme-controls"
+      initThemeControls()
+      document.addEventListener("astro:page-load", () => {
+        initThemeControls()
+      })
+    </script>
+  </body>
+</html>

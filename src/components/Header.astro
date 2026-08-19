@@ -1,0 +1,49 @@
+---
+import { nav, site } from "../content/site"
+import { isCurrentPath } from "../lib/paths"
+
+const pathname = Astro.url.pathname
+---
+
+<header
+  class="site-header sticky top-0 z-40 border-b border-line/80 bg-paper/80 backdrop-blur-md"
+  transition:persist="site-header"
+>
+  <div class="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
+    <a
+      href="/"
+      class="pressable inline-flex min-h-11 items-center text-sm font-semibold tracking-tight"
+      data-pressable
+      data-wordmark
+      transition:name="wordmark"
+    >
+      {site.brand}
+    </a>
+    <nav aria-label="Primary" class="flex flex-wrap items-center justify-end gap-1">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class:list={["nav-pill pressable", isCurrentPath(pathname, item.href) && "is-active"]}
+            aria-current={isCurrentPath(pathname, item.href) ? "page" : undefined}
+            data-pressable
+            data-nav-link
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <button
+        type="button"
+        class="btn-ghost btn-compact pressable"
+        data-theme-toggle
+        data-pressable
+        aria-pressed="true"
+        aria-label="Switch to light mode"
+        title="Switch to light mode"
+      >
+        <span class="text-sm font-semibold">Theme</span>
+      </button>
+    </nav>
+  </div>
+</header>
